@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>쿠버네티스 이것저것 - 권순배 블로그</title>
+
+  <!-- Edit site and author settings in `_config.yml` to make the social details your own -->
+
+    <meta content="권순배 블로그" property="og:site_name">
+  
+    <meta content="쿠버네티스 이것저것" property="og:title">
+  
+  
+    <meta content="article" property="og:type">
+  
+  
+    <meta content="설명1" property="og:description">
+  
+  
+    <meta content="/%E1%84%8F%E1%85%AE%E1%84%87%E1%85%A5%E1%84%82%E1%85%A6%E1%84%90%E1%85%B5%E1%84%89%E1%85%B3/" property="og:url">
+  
+  
+    <meta content="2023-10-09T21:00:00+09:00" property="article:published_time">
+    <meta content="/about/" property="article:author">
+  
+  
+    <meta content="/blog/assets/img/2023-10/k.png" property="og:image">
+  
+  
+    
+  
+  
+    
+    <meta content="k8s" property="article:tag">
+    
+    <meta content="쿠버네티스" property="article:tag">
+    
+  
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@">
+    <meta name="twitter:creator" content="@ossboard">
+  
+    <meta name="twitter:title" content="쿠버네티스 이것저것">
+  
+  
+    <meta name="twitter:url" content="/%E1%84%8F%E1%85%AE%E1%84%87%E1%85%A5%E1%84%82%E1%85%A6%E1%84%90%E1%85%B5%E1%84%89%E1%85%B3/">
+  
+  
+    <meta name="twitter:description" content="설명1">
+  
+  
+    <meta name="twitter:image:src" content="/blog/assets/img/2023-10/k.png">
+  
+
+	<meta name="description" content="설명1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta property="og:image" content="">
+	<link rel="shortcut icon" href="/blog/assets/img/favicon/favicon.ico" type="image/x-icon">
+	<link rel="apple-touch-icon" href="/blog/assets/img/favicon/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/blog/assets/img/favicon/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="/blog/assets/img/favicon/apple-touch-icon-144x144.png">
+	<!-- Chrome, Firefox OS and Opera -->
+	<meta name="theme-color" content="#263959">
+	<!-- Windows Phone -->
+	<meta name="msapplication-navbutton-color" content="#263959">
+	<!-- iOS Safari -->
+	<meta name="apple-mobile-web-app-status-bar-style" content="#263959">
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=PT+Serif:400,700|Lato:300,400,700&display=swap" rel="stylesheet">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="/blog/assets/fonts/font-awesome/css/font-awesome.min.css">
+	<!-- Styles -->
+	<link rel="stylesheet" href="/blog/assets/css/main.css">
+</head>
+
+<body>
+
+  <div class="wrapper">
+    <aside class="sidebar">
+  <header>
+    <div class="about">
+      <div class="cover-author-image">
+        <a href="/blog/"><img src="/blog/assets/img/profile.jpg" alt="권순배"></a>
+      </div>
+      <div class="author-name">권순배</div>
+      <p>반갑습니다.</p>
+    </div>
+  </header> <!-- End Header -->
+  <footer>
+    <section class="contact">
+      <h3 class="contact-title">Contact me</h3>
+      <ul>
+        
+          <li><a href="https://twitter.com/ossboard" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+        
+        
+          <li><a href="https://facebook.com/ossboard" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+        
+        
+          <li class="github"><a href="http://github.com/ossboard" target="_blank"><i class="fa fa-github"></i></a></li>
+        
+        
+          <li class="linkedin"><a href="https://in.linkedin.com/in/ossboard" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+        
+        
+          <li class="email"><a href="mailto:ossboard@gmail.com"><i class="fa fa-envelope-o"></i></a></li>
+        
+      </ul>
+    </section> <!-- End Section Contact -->
+    <div class="copyright">
+      <p>2023 &copy; 권순배</p>
+    </div>
+  </footer> <!-- End Footer -->
+</aside> <!-- End Sidebar -->
+<div class="content-box clearfix">
+  <article class="article-page">
+  <div class="page-content">
+    
+    <div class="page-cover-image">
+      <figure>
+        <img class="page-image" src=/blog/assets/img/2023-10/k.png alt="쿠버네티스 이것저것">
+        
+          <figcaption>캡션1</figcaption>
+        
+      </figure>
+    </div> <!-- End Page Cover Image -->
+    
+    <div class="wrap-content">
+      <header class="header-page">
+        <h1 class="page-title">쿠버네티스 이것저것</h1>
+        <div class="page-date"><span>2023, Oct 09&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+      </header>
+      <h3 id="쿠버네티스정의">쿠버네티스정의</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- 쿠버네티스는 컨테이너화된 워크노드를 관리하기 위한 오픈소스 플랫폼이다.
+- 클러스터 - 컨테이너화된 애플리케이션을 실행하는 노드라고하는 워커머신의 집합. 모든 클러스터는 최소 한개의 워커노드를 가진다.
+  노드: 애플맄ㅋ케이션의 구성요소인 pod를 호스트한다.
+      
+ - 
+</code></pre></div></div>
+
+<blockquote>
+  <p>Pod - Node 어디에 배포될지알수없음
+Deployment - 같은Pod가 여러개의 node에 배포되는형태, Pod가 죽을경우대비하여 서비스보호차원 , ex) –replicas=3
+ReplicaSet -
+Service -</p>
+</blockquote>
+
+<h3 id="쿠버네티스-apiversion-종류">쿠버네티스 apiVersion 종류</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>v1 - 쿠버네티스에서 발행한 첫 stable release API (대부분의 api가 포함되어 있음)
+apps/v1 - 쿠버네티스의 common API 모음, Deployment, RollingUpdate, ReplicaSet을 포함
+autoscaling/v1 - pod의 autoscale 기능을 포함하는 API, 현재는 CPU metric을 사용한 scaling만 가능 (추후에 alpha, beta version에서 memory, custom metric으로 scaling 기능 추가예정)
+batch/v1 - 배치 프로세스, job-like task를 위한 배포 api
+batch/v1beta1 - batch/v1에서 cronJob으로 job을 돌리는 api가 추가
+certivicates.k8s.io/v1 - beta 클러스터의 secure network function들이 추가된 API (TLS 등의 기능 추가)
+extensions/v1beta - Deployments, DaemonSets, ReplicatSets, Ingress 등 상당수 feature들이 새롭게 정의된 API 그러나 상당수의 api들이 apps/v1과 같은 그룹으로 이동되어서, 쿠버네티스 1.6버젼 이후부터는 deprecated 됨
+policy/v1beta1 - pod에 대한 security rule이 정의된 API
+rbac.authorization.k8s.io/v1 - 쿠버네티스의 role-based access control이 가능한 function이 정의됨
+</code></pre></div></div>
+<h3 id="쿠버네티스-오브젝트-httpshyeri0903tistorycom216">쿠버네티스 오브젝트 (https://hyeri0903.tistory.com/216)</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pod - 하나의pod가 하나의 논리적호스트를 의미하며, 쿠버네티스에서 가징 기본적인 배포단위
+service - pod집합에서 실행중인 애플리케이션을 네트워크 서비스로 노출하는 추상화방법
+volume - pod의 스팩에서 정의됨.
+namespace - 클러스터 하나를 여러개의 논리적인 단위로 사용, pod/service등은 네임스페이스별로 생성/관리/권한 나눠서 부여가능
+</code></pre></div></div>
+
+<h3 id="dashboard-27-설치">dashboard 2.7 설치</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+
+cat &lt;&lt;EOF &gt; dashboard-service-account.yml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+name: admin-user
+namespace: kubernetes-dashboard
+EOF
+kubectl apply -f dashboard-service-account.yml
+
+cat &lt;&lt;EOF &gt; dashboard-cluster-role-binding.yml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+name: admin-user
+roleRef:
+apiGroup: rbac.authorization.k8s.io
+kind: ClusterRole
+name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: admin-user
+  namespace: kubernetes-dashboard
+  EOF
+  kubectl apply -f dashboard-cluster-role-binding.yml
+
+cat &lt;&lt;EOF &gt; service-account-token.yml
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+name: ks-admin
+namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+name: ks-admin
+roleRef:
+apiGroup: rbac.authorization.k8s.io
+kind: ClusterRole
+name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: ks-admin
+  namespace: kube-system
+  EOF
+  kubectl apply -f service-account-token.yml
+
+kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user-token | awk '{print $1}')
+
+kubectl edit svc kubernetes-dashboard -n kubernetes-dashboard
+type: ClusterIP -&gt; NodePort:$ 로 변경
+kubectl edit svc kubernetes-dashboard -n kubernetes-dashboard
+nodePort: 30000 변경
+kubectl get svc -n kubernetes-dashboard                    # open https://127.0.0.1:30000
+
+$ kubectl proxy
+http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+
+</code></pre></div></div>
+
+<h3 id="네임스페이스">네임스페이스</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl delete namespaces ns00000101                        # 네임스페이스 삭제
+cat &lt;&lt;EOF &gt; ns00000101.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+name: ns00000101
+labels:
+app: konan   
+EOF
+kubectl create -f ns00000101.yaml                           # 네임스페이스 생성
+kubectl get namespaces --show-labels                        # 네임스페이스보기
+kubectl describe namespaces ns00000101                      # 네임스페이스 상세보기
+
+kubectl delete limitrange limitrange1 -n=ns00000101         # limitrange 삭제
+cat &lt;&lt;EOF &gt; limitrange.yaml
+apiVersion: v1
+kind: LimitRange
+metadata:
+name: limitrange1
+labels:
+app: konan   
+spec:
+limits:
+- default:
+  memory: 512Mi
+  defaultRequest:
+  memory: 256Mi
+  type: Container
+  EOF
+  kubectl apply -f limitrange.yaml -n=ns00000101                  # limitrange 생성
+  kubectl get limitrange limitrange1 --show-labels -n=ns00000101  # limitrange 보기
+</code></pre></div></div>
+
+<h3 id="configmap-생성">configmap 생성</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl delete configmap configmap1 -n=ns00000101             # configmap 삭제
+cat &lt;&lt;EOF &gt; configmap1.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+name: configmap1
+labels:
+app: konan  
+data:
+data.one: one
+data.two: two
+EOF
+kubectl create -f configmap1.yaml -n=ns00000101               # configmap 생성
+kubectl get configmaps configmap1 --show-labels -n=ns00000101 # configmap 보기
+kubectl describe configmaps configmap1 -n=ns00000101          # configmap 상세
+</code></pre></div></div>
+
+<h3 id="pod-생성">pod 생성</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl delete pod pod1 -n=ns00000101                         # nginx pod삭제
+cat &lt;&lt;EOF &gt; pod1.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+name: pod1
+labels:
+app: konan   
+spec:
+hostAliases:
+- ip: "10.1.2.3"
+  hostnames:
+    - "factory"
+      containers:
+- name: pod1-c1
+  image: nginx
+  ports:
+    - containerPort: 7000
+      volumeMounts:
+    - name: vol1
+      mountPath: /etc/config1
+    - name: vol2
+      mountPath: /usr/share/nginx/html
+      initContainers:
+- name: install
+  image: busybox:1.28
+  command:
+    - wget
+    - "-O"
+    - "/work-dir/index.html"
+    - https://www.google.com
+      volumeMounts:
+    - name: vol2
+      mountPath: "/work-dir"
+      volumes:
+- name: vol1
+  configMap:
+  name: configmap1
+- name: vol2
+  emptyDir: {}
+  dnsPolicy: Default
+  restartPolicy: Never      
+  EOF
+  kubectl apply -f pod1.yaml -n=ns00000101                        # nginx pod생성
+  kubectl get pod pod1 --show-labels -n=ns00000101                # pod 조회
+  kubectl get pod pod1 --output=yaml -n=ns00000101                # pod 상세조회
+  kubectl exec -it pod/pod1 -c=pod1-c1 -n=ns00000101 -- /bin/bash # pod1c1 콘솔접속
+  root@~# ls -al /usr/share/nginx/html/index.html
+  root@~# ls -al /etc/config1
+  root@~# apt-get update
+  root@~# apt-get -y install curl iputils-ping
+  root@~# curl localhost
+  kubectl port-forward pod/pod1 8888:80 -n=ns00000101             # open http://127.0.0.1:8888
+  kubectl describe pod pod1
+  kubectl get events
+</code></pre></div></div>
+
+<h3 id="defalut-namespace">defalut namespace</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl config view
+kubectl config set-context $(kubectl config current-context) --namespace=ns00000101
+kubectl get pods
+</code></pre></div></div>
+
+<h3 id="deploymentservice-예제">Deployment/Service 예제</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl delete deployments hello-world
+kubectl apply -f https://k8s.io/examples/service/load-balancer-example.yaml
+kubectl get deployments hello-world
+kubectl describe deployments hello-world
+kubectl get deployments hello-world
+kubectl describe deployments hello-world
+
+kubectl delete services my-service
+kubectl expose deployment hello-world --type=LoadBalancer --name=my-service
+kubectl describe services my-service
+kubectl get pods --output=wide
+
+curl http://localhost:8080
+</code></pre></div></div>
+
+<h3 id="deploymentservice-생성">Deployment/Service 생성</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl delete deployment dpm1                             # deployment 삭제
+cat &lt;&lt;EOF &gt; deployment1.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+name: dpm1
+labels:
+app: dpm1
+spec:
+replicas: 2
+selector:
+matchLabels:
+app: dpm1
+template:
+metadata:
+labels:
+app: dpm1
+spec:
+containers:
+- name: dpm1-c1
+image: nginx
+ports:
+- containerPort: 80
+EOF
+kubectl apply -f deployment1.yaml                     # deployment 생성
+kubectl get deployment dpm1                           # deployment 조회
+kubectl describe deployment dpm1                      # deployment 상세
+
+kubectl delete service service1                                          # Service 삭제
+cat &lt;&lt;EOF &gt; service1.yaml
+apiVersion: v1
+kind: Service
+metadata:
+name: service1
+labels:
+run: dpm1
+spec:
+type: LoadBalancer  # ClusterIP(default), LoadBalancer, NodePort, ExternalName
+ports:
+- port: 8888
+  targetPort: 80
+  protocol: TCP
+  selector:
+  app: dpm1
+  EOF
+  kubectl apply -f service1.yaml                                        # service 생성
+  kubectl get services service1                                         # service 조회
+  kubectl describe services service1                                    # service 상세조회
+  kubectl get pods --output=wide
+  kubectl get nodes -o wide
+  kubectl get svc
+  또는
+  kubectl expose deployment dpm1 --type=LoadBalancer --port=8888 --target-port=80 --name=service1
+  curl http://localhost:8888
+  curl hostname-svc-clusterip:8888 --silent                              # NodePort일때
+
+</code></pre></div></div>
+
+<p>###</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl delete pod pod2 -n=ns00000101                         # nginx pod삭제
+cat &lt;&lt;EOF &gt; pod2.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+name: pod2
+spec:
+containers:
+- name: pod2-c1
+  image: nginx
+  ports:
+    - containerPort: 7000
+- name: pod2-c2
+  image: centos:7
+  command:
+    - sleep
+    - "10000"
+      EOF
+      kubectl apply -f pod2.yaml -n=ns00000101                        # nginx pod생성
+      kubectl get pod pod2 --show-labels -n=ns00000101                # pod 조회
+      kubectl exec -it pod/pod2 -c=pod2-c1 -n=ns00000101 -- /bin/bash # pod2 c1 콘솔접속
+      kubectl exec -it pod/pod2 -c=pod2-c2 -n=ns00000101 -- /bin/bash # pod2 c2 콘솔접속
+      kubectl describe pods
+
+</code></pre></div></div>
+
+<p><img src="/blog/assets/img/we-in-rest.jpg" alt="I and My friends" /></p>
+
+      <div class="page-footer">
+        <div class="page-share">
+          <a href="https://twitter.com/intent/tweet?text=쿠버네티스 이것저것&url=/%E1%84%8F%E1%85%AE%E1%84%87%E1%85%A5%E1%84%82%E1%85%A6%E1%84%90%E1%85%B5%E1%84%89%E1%85%B3/" title="Share on Twitter" rel="nofollow" target="_blank">Twitter</a>
+          <a href="https://facebook.com/sharer.php?u=/%E1%84%8F%E1%85%AE%E1%84%87%E1%85%A5%E1%84%82%E1%85%A6%E1%84%90%E1%85%B5%E1%84%89%E1%85%B3/" title="Share on Facebook" rel="nofollow" target="_blank">Facebook</a>
+          <a href="https://plus.google.com/share?url=/%E1%84%8F%E1%85%AE%E1%84%87%E1%85%A5%E1%84%82%E1%85%A6%E1%84%90%E1%85%B5%E1%84%89%E1%85%B3/" title="Share on Google+" rel="nofollow" target="_blank">Google+</a>
+        </div>
+        <div class="page-tag">
+          
+            <a href="/blog/tags#k8s" class="tag">&#35; k8s</a>
+          
+            <a href="/blog/tags#쿠버네티스" class="tag">&#35; 쿠버네티스</a>
+          
+        </div>
+      </div>
+<!--      <section class="comment-area">
+  <div class="comment-wrapper">
+    
+    <div id="disqus_thread" class="article-comments"></div>
+    <script>
+      (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//mr-brown.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+  </div>
+</section> <!-- End Comment Area -->
+-->
+    </div> <!-- End Wrap Content -->
+  </div> <!-- End Page Content -->
+</article> <!-- End Article Page -->
+
+</div>
+
+  </div>
+  
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'ossboard', 'auto');
+  ga('send', 'pageview');
+</script> <!-- End Analytics -->
+
+</body>
+</html>
