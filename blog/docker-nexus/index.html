@@ -127,50 +127,73 @@
       <h3 id="nexus-java">nexus java</h3>
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>*기존꺼모두 지움!!
 
-톱니&gt;Repositories&gt;+Create R&gt; raw(proxy) &gt;
-Name : gradle-dist
-Remote storage : https://services.gradle.org/distributions/
-Blob storag: 선택
+- docker-hosted,docker-proxy Blob 생성
+톱니 &gt; Repository &gt; Blob Stores &gt; Create blob store
+gradle-dist 생성
+maven-proxy 생성
 
-톱니&gt;Repositories&gt;+Create R&gt; maven2(proxy) &gt;
-Name : maven-public
-Online 체크
-Permissive, Inline
-Remote storage : https://plugins.gradle.org/m2/
-Blob storag: 선택
+- gradle-dist Repository 생성
+톱니 &gt; Repository &gt; Repositories &gt; Create repository
+
+선택 'raw (proxy)'
+- Name : gradle-dist
+- Remote storage : 'https://services.gradle.org/distributions/'
+- 선택 Blob store 'gradle-dist'
+
+선택 'maven2 (proxy)'
+- Name : maven-proxy
+- Remote storage : 'https://plugins.gradle.org/m2/'
+- 선택 Blob store 'maven-proxy'
 
 이후, gradle-wrapper.properties
 distributionUrl= http\://nexus.konan/repository/gradle-dist/gradle-7.6-bin.zip
 
 </code></pre></div></div>
 
-<h3 id="nexus-docker--httpsvelogiokingprivate-docker-registry-">nexus docker ( https://velog.io/@king/private-docker-registry )</h3>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>톱니&gt;Blob Stores &gt; file, docker-repos 생성
+<h3 id="nexus-docker--httpsqiitacomleechungkyuitems86cad0396cf95b3b6973-">nexus docker ( https://qiita.com/leechungkyu/items/86cad0396cf95b3b6973 )</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- docker-hosted,docker-proxy Blob 생성
+톱니 &gt; Repository &gt; Blob Stores &gt; Create blob store
+docker-hosted, docker-hub 생성
 
-톱니&gt;Repository&gt;+Create repository&gt;docker(hosted)&gt;
-Name: docker-local
-HTTP: 5001
-Allow anonymous docker pull: 체크
-Enable Docker V1 API: 체크
-Blob store: docker-repos 선택
+- docker-hosted,docker-proxy Repository 생성
+톱니 &gt; Repository &gt; Repositories &gt; Create repository
 
-톱니&gt;Repository&gt;+Create repository&gt;docker(proxy)&gt;
-Name: docker-remote
-Allow anonymous docker pull: 체크
-Proxy
-Remote storage: https://registry-1.docker.io
-Use the Nexus Repository truststore: 체크
-Use Docker Hub : 선택
-Use the Nextus truststore: 체크
-Blob store: docker-repos 선택
+선택 'docker (hosted)'
+- Name : docker-hosted
+- 체크 'HTTP' , 입력 5000
+- 체크 'Enable Docker V1 API'
+- 선택 Blob store 'docker-hosted'
 
-톱니&gt;Repository&gt;+Create repository&gt;docker(group)&gt;
-Name: docker-repos
-HTTP: 5000
-Allow anonymous docker pull: 체크
-Enable Docker V1 API: 체크
-Blob store: docker-repos 선택
-docker-local,docker-remote &gt; Members 이동
+선택 'docker (proxy)'
+- Name : docker-hub
+- 체크 'Enable Docker V1 API'
+- Input https://registry-1.docker.io in Remote storage
+- 선택 'Use Docker Hub'
+- 선택 Blob store 'docker-hub'
+
+- Realms 설정
+톱니 &gt; Realms &gt;  'Docker Bearer Token Realm' 을 active 이동 &gt; Save
+
+- docker command http 활성화 (v1)
+$ cat /etc/docker/daemon.json ( mac: ~/.docker/daemon.json )
+{
+  "insecure-registries" : ["IP:5000"]
+}
+service docker restart
+
+
+docker login 127.0.0.1:5000
+...
+Login Succeeded
+
+docker pull busybox
+docker images -a
+docker tag 6d5fcfe5ff17 127.0.0.1:5000/busybox:v20200205
+docker push 127.0.0.1:5000/busybox:v20200205
+
+docker pull 127.0.0.1:5000/busybox:v20200205
+docker images -a
+
 </code></pre></div></div>
 
       <div class="page-footer">
