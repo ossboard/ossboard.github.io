@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
-<loc>http://localhost:4000/blog/test/</loc>
+<loc>/blog/test/</loc>
 <lastmod>2023-10-09T00:00:00+09:00</lastmod>
 </url>
 <url>
-<loc>http://localhost:4000/blog/kubernetes/</loc>
+<loc>/blog/docker-nexus/</loc>
 <lastmod>2023-10-09T21:00:00+09:00</lastmod>
 </url>
 <url>
-<loc>http://localhost:4000/blog/</loc>
+<loc>/blog/kubernetes/</loc>
+<lastmod>2023-10-09T21:00:00+09:00</lastmod>
 </url>
 <url>
-<loc>http://localhost:4000/blog/tags/</loc>
+<loc>/blog/</loc>
+</url>
+<url>
+<loc>/blog/tags/</loc>
 </url>
 </urlset>

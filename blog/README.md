@@ -7,11 +7,11 @@ cd io
 bundle exec jekyll serve
 
 bundle exec jekyll build
-rsync -avh -delete _site/* ../ossboard.github.io/blog/
-cd ../ossboard.github.io/blog/
+rsync -avh --delete _site/* ../ossboard.github.io/blog/
+cd ../ossboard.github.io
 git add *
 git commit -m "blog"
-git remote -v
 git push origin main
 cd ../io
+
 ```
