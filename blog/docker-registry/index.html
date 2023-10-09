@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Docker Image를 활용한 Local Registry 구축 - 권순배 블로그</title>
+
+  <!-- Edit site and author settings in `_config.yml` to make the social details your own -->
+
+    <meta content="권순배 블로그" property="og:site_name">
+  
+    <meta content="Docker Image를 활용한 Local Registry 구축" property="og:title">
+  
+  
+    <meta content="article" property="og:type">
+  
+  
+    <meta content="설명1" property="og:description">
+  
+  
+    <meta content="/docker-registry/" property="og:url">
+  
+  
+    <meta content="2023-10-06T21:00:00+09:00" property="article:published_time">
+    <meta content="/about/" property="article:author">
+  
+  
+    <meta content="/blog/assets/img/profile.jpg" property="og:image">
+  
+  
+    
+  
+  
+    
+    <meta content="nexus" property="article:tag">
+    
+    <meta content="k8s" property="article:tag">
+    
+  
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@">
+    <meta name="twitter:creator" content="@ossboard">
+  
+    <meta name="twitter:title" content="Docker Image를 활용한 Local Registry 구축">
+  
+  
+    <meta name="twitter:url" content="/docker-registry/">
+  
+  
+    <meta name="twitter:description" content="설명1">
+  
+  
+    <meta name="twitter:image:src" content="/blog/assets/img/profile.jpg">
+  
+
+	<meta name="description" content="설명1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta property="og:image" content="">
+	<link rel="shortcut icon" href="/blog/assets/img/favicon/favicon.ico" type="image/x-icon">
+	<link rel="apple-touch-icon" href="/blog/assets/img/favicon/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/blog/assets/img/favicon/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="/blog/assets/img/favicon/apple-touch-icon-144x144.png">
+	<!-- Chrome, Firefox OS and Opera -->
+	<meta name="theme-color" content="#263959">
+	<!-- Windows Phone -->
+	<meta name="msapplication-navbutton-color" content="#263959">
+	<!-- iOS Safari -->
+	<meta name="apple-mobile-web-app-status-bar-style" content="#263959">
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=PT+Serif:400,700|Lato:300,400,700&display=swap" rel="stylesheet">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="/blog/assets/fonts/font-awesome/css/font-awesome.min.css">
+	<!-- Styles -->
+	<link rel="stylesheet" href="/blog/assets/css/main.css">
+</head>
+
+<body>
+
+  <div class="wrapper">
+    <aside class="sidebar">
+  <header>
+    <div class="about">
+      <div class="cover-author-image">
+        <a href="/blog/"><img src="/blog/assets/img/profile.jpg" alt="권순배"></a>
+      </div>
+      <div class="author-name">권순배</div>
+      <p>반갑습니다.</p>
+    </div>
+  </header> <!-- End Header -->
+  <footer>
+    <section class="contact">
+      <h3 class="contact-title">Contact me</h3>
+      <ul>
+        
+          <li><a href="https://twitter.com/ossboard" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+        
+        
+          <li><a href="https://facebook.com/ossboard" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+        
+        
+          <li class="github"><a href="http://github.com/ossboard" target="_blank"><i class="fa fa-github"></i></a></li>
+        
+        
+          <li class="linkedin"><a href="https://in.linkedin.com/in/ossboard" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+        
+        
+          <li class="email"><a href="mailto:ossboard@gmail.com"><i class="fa fa-envelope-o"></i></a></li>
+        
+      </ul>
+    </section> <!-- End Section Contact -->
+    <div class="copyright">
+      <p>2023 &copy; 권순배</p>
+    </div>
+  </footer> <!-- End Footer -->
+</aside> <!-- End Sidebar -->
+<div class="content-box clearfix">
+  <article class="article-page">
+  <div class="page-content">
+    
+    
+    <div class="wrap-content">
+      <header class="header-page">
+        <h1 class="page-title">Docker Image를 활용한 Local Registry 구축</h1>
+        <div class="page-date"><span>2023, Oct 06&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+      </header>
+      <h2 id="순서">순서</h2>
+
+<p>1) docker private registry를 설치</p>
+
+<p>2) docker run… 5000:5000으로 docker 기동</p>
+
+<p>3) 다음으로 Dockerfile을 생성하여 Docker 이미지를 생성</p>
+
+<p>4) docker tag로 tag를 명시하여 이미지를 업로드</p>
+
+<h3 id="docker-registry-설치">Docker Registry 설치</h3>
+
+<ol>
+  <li>Docker registry Images 가져오기</li>
+</ol>
+
+<p>Docker Repository를 생성하고 다음 정상 생성되었는지 확인합니다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[ossboard@kube1 ~]# docker pull registry:latest
+latest: Pulling from library/registry
+96526aa774ef: Pull complete 
+cc37b24bb099: Pull complete 
+1d8a1aa97222: Pull complete 
+e3ff0af69d79: Pull complete 
+17443307a4fc: Pull complete 
+Digest: sha256:12a6ddd56d2de5611ff0d9735ac0ac1d1e44073c7d042477329e589c46867e4e
+Status: Downloaded newer image for registry:latest
+docker.io/library/registry:latest
+[ossboard@kube1 ~]# 
+</code></pre></div></div>
+
+<p>docker docker images로 정상 생성여부를 확인하고 Docker에 접속할 계정을 생성합니다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[ossboard@kube1 ~]# docker images registry
+REPOSITORY   TAG       IMAGE ID       CREATED      SIZE
+registry     latest    0ae1560ca86f   6 days ago   25.4MB
+[ossboard@kube1 ~]#
+</code></pre></div></div>
+
+<ol>
+  <li>Docker registry 실행</li>
+</ol>
+
+<ul>
+  <li>docker run 명령어로 컨테이너 기동</li>
+  <li>–name은 docker image 이름</li>
+  <li>-d daemon으로 (백그라운드) 실행</li>
+  <li>-p 5000:5000 registry 실행 (local 5000번 포트 -&gt; 이미지 5000번 포트로 바인딩)</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[ossboard@kube1 ~]# docker run --name local-docker -d -p 5000:5000 registry
+9559e9cbc101714f8620138f66f50cf8423b3a32727ecfd109db9fca4d2d4fde
+[ossboard@kube1 ~]#
+</code></pre></div></div>
+
+<ol>
+  <li>Docker registry 확인</li>
+</ol>
+
+<p>docker ps -a로 확인하면 추가한 docker registry를 확인할 수 있습니다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[ossboard@kube1 ~]# docker ps -a | grep local-docker
+9559e9cbc101   registry                    "/entrypoint.sh /etc…"   2 minutes ago   Up 2 minutes                 0.0.0.0:5000-&gt;5000/tcp                           local-docker
+[ossboard@kube1 ~]#
+</code></pre></div></div>
+
+<p>docker ps -l 을 사용하면 최근에 추가한 컨테이너를 확인</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[ossboard@kube1 ~]# docker ps -l
+CONTAINER ID   IMAGE      COMMAND                   CREATED         STATUS         PORTS                    NAMES
+9559e9cbc101   registry   "/entrypoint.sh /etc…"   2 minutes ago   Up 2 minutes   0.0.0.0:5000-&gt;5000/tcp   local-docker
+[ossboard@kube1 ~]# 
+</code></pre></div></div>
+
+<h3 id="docker-registry-활용">Docker Registry 활용</h3>
+
+<ol>
+  <li>Dockerfile 작성</li>
+</ol>
+
+<p>간단한 Dockerfile 작성및 생성을 작성합니다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[ossboard@kube1 ~]# cat &lt;&lt;EOF &gt; Dockerfile
+FROM ubuntu:16.04
+MAINTAINER OSSBOARD &lt;ossboard@gmail.com&gt;
+CMD echo 'Hello My Friend!'
+EOF 
+
+[ossboard@kube1 ~]# docker build -t 192.168.10.5:5000/ossboard/hello:1.0 .
+[+] Building 9.8s (5/5) FINISHED                                                                                                                                                                       docker:desktop-linux
+ =&gt; [internal] load build definition from Dockerfile                                                                                                                                                                   0.0s
+ =&gt; =&gt; transferring dockerfile: 124B                                                                                                                                                                                   0.0s
+ =&gt; [internal] load .dockerignore                                                                                                                                                                                      0.0s
+ =&gt; =&gt; transferring context: 2B                                                                                                                                                                                        0.0s
+ =&gt; [internal] load metadata for docker.io/library/ubuntu:16.04                                                                                                                                                        2.9s
+ =&gt; [1/1] FROM docker.io/library/ubuntu:16.04@sha256:1f1a2d56de1d604801a9671f301190704c25d604a416f59e03c04f5c6ffee0d6                                                                                                  6.8s
+ =&gt; =&gt; resolve docker.io/library/ubuntu:16.04@sha256:1f1a2d56de1d604801a9671f301190704c25d604a416f59e03c04f5c6ffee0d6                                                                                                  0.0s
+ =&gt; =&gt; sha256:1f1a2d56de1d604801a9671f301190704c25d604a416f59e03c04f5c6ffee0d6 1.42kB / 1.42kB                                                                                                                         0.0s
+ =&gt; =&gt; sha256:a3785f78ab8547ae2710c89e627783cfa7ee7824d3468cae6835c9f4eae23ff7 1.15kB / 1.15kB                                                                                                                         0.0s
+ =&gt; =&gt; sha256:b6f50765242581c887ff1acc2511fa2d885c52d8fb3ac8c4bba131fd86567f2e 3.36kB / 3.36kB                                                                                                                         0.0s
+ =&gt; =&gt; sha256:58690f9b18fca6469a14da4e212c96849469f9b1be6661d2342a4bf01774aa50 46.50MB / 46.50MB                                                                                                                       1.1s
+ =&gt; =&gt; sha256:b51569e7c50720acf6860327847fe342a1afbe148d24c529fb81df105e3eed01 857B / 857B                                                                                                                             0.3s
+ =&gt; =&gt; sha256:da8ef40b9ecabc2679fe2419957220c0272a965c5cf7e0269fa1aeeb8c56f2e1 528B / 528B                                                                                                                             0.2s
+ =&gt; =&gt; sha256:fb15d46c38dcd1ea0b1990006c3366ecd10c79d374f341687eb2cb23a2c8672e 170B / 170B                                                                                                                             0.5s
+ =&gt; =&gt; extracting sha256:58690f9b18fca6469a14da4e212c96849469f9b1be6661d2342a4bf01774aa50                                                                                                                              5.4s
+ =&gt; =&gt; extracting sha256:b51569e7c50720acf6860327847fe342a1afbe148d24c529fb81df105e3eed01                                                                                                                              0.0s
+ =&gt; =&gt; extracting sha256:da8ef40b9ecabc2679fe2419957220c0272a965c5cf7e0269fa1aeeb8c56f2e1                                                                                                                              0.0s
+ =&gt; =&gt; extracting sha256:fb15d46c38dcd1ea0b1990006c3366ecd10c79d374f341687eb2cb23a2c8672e                                                                                                                              0.0s
+ =&gt; exporting to image                                                                                                                                                                                                 0.0s
+ =&gt; =&gt; exporting layers                                                                                                                                                                                                0.0s
+ =&gt; =&gt; writing image sha256:57a5b35bbbedf9a98ff4d3900696efd6e4ad1a2e55ad8cb3cec25e677eb7cf9e                                                                                                                           0.0s
+ =&gt; =&gt; naming to 192.168.10.5:5000/ossboard/hello:1.0
+[ossboard@kube1 ~]#       
+</code></pre></div></div>
+
+<p>192.168.10.5:5000/ossboard/hello라는 tag 이름으로 docker 이미지를 생성하였습니다.</p>
+
+<p>docker build 시 환경 변수를 주입하고자 할 경우에는 다음과 같이 작성이 가능합니다.</p>
+
+<p>docker build -t 192.168.10.5:5000/ossboard/hello:1.0 –build-arg MY_IMAGE=ossboard .</p>
+
+<p>여기서 주의 할 점은 tag 이름에 docker registry ip:port를 작성하여야 이후 docker push 시점에 해당 repogitory를 직접 찾아 간다는 점입니다.</p>
+
+<p>즉 docker tag의 형식은 [DOCKER_REGISTRY_IP]:[DOCKER_REGISTRY_PORT]/[REPOGITORY]/[IMAGE_NAME]:[TAG] 라고 볼 수 있습니다.</p>
+
+<ol>
+  <li>docker images 생성확인</li>
+</ol>
+
+<p>방금전 생성한 192.168.10.5:5000/ossboard/hello 이미지가 생성된 것을 볼 수 있습니다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[ossboard@kube1 ~]# docker images 192.168.10.5:5000/ossboard/hello:1.0
+REPOSITORY                      TAG       IMAGE ID       CREATED       SIZE
+192.168.10.5:5000/ossboard/hello   1.0       57a5b35bbbed   2 years ago   135MB
+[ossboard@kube1 ~]# docker run 192.168.10.5:5000/ossboard/hello:1.0
+Hello My Friend!
+[ossboard@kube1 ~]#
+</code></pre></div></div>
+<p>docker run 수행 시 Dockerfile에 작성한 Hello My Friend!가 출력되는 것을 볼 수 있습니다.</p>
+
+<p>그럼 이제 생성한 이미지를 Docker Private Registry에 Push 합니다.</p>
+
+<ol>
+  <li>docker tag를 이용하여 docker registry에 push</li>
+</ol>
+
+<p>앞서 생성한 Private Registry에 이미지를 올려보도록 하겠습니다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[ossboard@kube1 ~]# docker push 192.168.10.5:5000/ossboard/hello:1.0
+The push refers to repository [192.168.10.5:5000/ossboard/hello]
+1251204ef8fc: Pushed 
+47ef83afae74: Pushed 
+df54c846128d: Pushed 
+be96a3f634de: Pushed 
+1.0: digest: sha256:85b67ef874e076b88380254d45ac62c9965f73345d886658449573a2ee7c1e5d size: 1150
+[ossboard@kube1 ~]# 
+</code></pre></div></div>
+
+<h3 id="docker-pull-활용">docker pull 활용</h3>
+
+<p>다음으로 Docker Private Registry에서 Pull하는 방법에 대해 알아보겠습니다.</p>
+
+<p>중요한 사항은 현재 local repository에 올라가 있는 image와 container를 모두 삭제한 이후 실행하는 것이 보다 확실할 수 있습니다.</p>
+
+<ol>
+  <li>docker rmi [image] and docker rm [container] 수행</li>
+</ol>
+
+<p>올라가 있는 Container를 docker rm으로 제거합니다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[ossboard@kube1 ~]# docker rmi 192.168.10.5:5000/ossboard/hello:1.0
+Untagged: 192.168.10.5:5000/ossboard/hello:1.0
+Untagged: 192.168.10.5:5000/ossboard/hello@sha256:85b67ef874e076b88380254d45ac62c9965f73345d886658449573a2ee7c1e5d
+[ossboard@kube1 ~]# docker images 192.168.10.5:5000/ossboard/hello:1.0
+REPOSITORY   TAG       IMAGE ID   CREATED   SIZE
+[ossboard@kube1 ~]#
+</code></pre></div></div>
+<ol>
+  <li>Docker Registry에서 docker run 수행</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[ossboard@kube1 ~]# docker run 192.168.10.5:5000/ossboard/hello:1.0
+Unable to find image '192.168.10.5:5000/ossboard/hello:1.0' locally
+1.0: Pulling from ossboard/hello
+Digest: sha256:85b67ef874e076b88380254d45ac62c9965f73345d886658449573a2ee7c1e5d
+Status: Downloaded newer image for 192.168.10.5:5000/ossboard/hello:1.0
+Hello My Friend!
+[ossboard@kube1 ~]# docker images 192.168.10.5:5000/ossboard/hello:1.0
+REPOSITORY                         TAG       IMAGE ID       CREATED       SIZE
+192.168.10.5:5000/ossboard/hello   1.0       57a5b35bbbed   2 years ago   135MB
+[ossboard@kube1 ~]#
+</code></pre></div></div>
+<p>위와 같이 정상적으로 docker run이 수행된 것을 볼 수 있습니다. locally에서 찾아보니 해당 이미지가 없어서 192.168.10.5:5000에서 이미지를 Pulling해서 실행하는 것을 볼 수 있습니다.</p>
+
+<p>Dockerfile에 명시한 CMD echo ‘Hello My Friend!’ 의 경우 echo 출력 후 바로 종료되어 Container 역시 종료됨을 알 수 있습니다.</p>
+
+<ul>
+  <li>출처: https://waspro.tistory.com/532</li>
+</ul>
+
+      <div class="page-footer">
+        <div class="page-share">
+          <a href="https://twitter.com/intent/tweet?text=Docker Image를 활용한 Local Registry 구축&url=/docker-registry/" title="Share on Twitter" rel="nofollow" target="_blank">Twitter</a>
+          <a href="https://facebook.com/sharer.php?u=/docker-registry/" title="Share on Facebook" rel="nofollow" target="_blank">Facebook</a>
+          <a href="https://plus.google.com/share?url=/docker-registry/" title="Share on Google+" rel="nofollow" target="_blank">Google+</a>
+        </div>
+        <div class="page-tag">
+          
+            <a href="/blog/tags#nexus" class="tag">&#35; nexus</a>
+          
+            <a href="/blog/tags#k8s" class="tag">&#35; k8s</a>
+          
+        </div>
+      </div>
+<!--      <section class="comment-area">
+  <div class="comment-wrapper">
+    
+    <div id="disqus_thread" class="article-comments"></div>
+    <script>
+      (function() {
+          var d = document, s = d.createElement('script');
+          s.src = '//mr-brown.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+  </div>
+</section> <!-- End Comment Area -->
+-->
+    </div> <!-- End Wrap Content -->
+  </div> <!-- End Page Content -->
+</article> <!-- End Article Page -->
+
+</div>
+
+  </div>
+  
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'ossboard', 'auto');
+  ga('send', 'pageview');
+</script> <!-- End Analytics -->
+
+</body>
+</html>
