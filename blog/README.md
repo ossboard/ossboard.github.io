@@ -7,7 +7,7 @@ cd io
 bundle exec jekyll serve
 
 bundle exec jekyll build
-rsync -avh _site/* ../ossboard.github.io/blog/
+rsync -avh -delete _site/* ../ossboard.github.io/blog/
 cd ../ossboard.github.io/blog/
 git add *
 git commit -m "blog"
